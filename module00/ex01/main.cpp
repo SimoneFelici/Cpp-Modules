@@ -4,6 +4,17 @@
 #include <limits>
 #include "PhoneBook.hpp"
 
+bool is_num(const std::string& s)
+{
+    for (std::string::size_type i = 0; i < s.size(); ++i)
+    {
+        unsigned char ch = static_cast<unsigned char>(s[i]);
+        if (!std::isdigit(ch))
+            return false;
+    }
+    return true;
+}
+
 std::string tr10(std::string s)
 {
     if (s.size() > 10)
@@ -21,6 +32,9 @@ int main()
     int count = 0;
     std::string num;
     std::string sec;
+    std::string first;
+    std::string last;
+    std::string nick;
 
     while (true)
     {
@@ -31,30 +45,39 @@ int main()
         {
             do {
                 std::cout << "> Enter the first name (required): ";
-                std::getline(std::cin, book.contact[i].first_name);
-                if (book.contact[i].first_name.empty())
+                std::getline(std::cin, first);
+                if (!std::getline(std::cin, cmd))
+                {
+                    std::cout << "bye :)" << std::endl;
+                    break;
+                }
+                if (first.empty())
                     std::cout << "  First name cannot be empty." << std::endl;
-            } while (book.contact[i].first_name.empty());
+            } while (first.empty());
+            book.contact[i].set_first(first);
 
             std::cout << "> Enter the last name (optional): ";
-            std::getline(std::cin, book.contact[i].last_name);
-
+            std::getline(std::cin, last);
+            book.contact[i].set_last(last);
             std::cout << "> Enter the nickname (optional): ";
-            std::getline(std::cin, book.contact[i].nickname);
+            std::getline(std::cin, nick);
+            book.contact[i].set_nick(nick);
 
             do {
                 std::cout << "> Enter the phone number (required): ";
                 std::getline(std::cin, num);
                 if (num.empty())
                     std::cout << "  Phone number cannot be empty." << std::endl;
-            } while (num.empty());
+                else if (!is_num(num))
+                    std::cout << "  Only numbers allowed." << std::endl;
+            } while (num.empty() || !is_num(num));
             book.contact[i].set_num(num);
 
             std::cout << "> Enter the darkest secret (optional): ";
             std::getline(std::cin, sec);
             book.contact[i].set_secret(sec);
 
-            book.contact[i].index = i;
+            book.contact[i].set_index(i);
             i = (i+1) % 8;
             if (count < 8)
                 ++count;
@@ -69,7 +92,7 @@ int main()
                 while(j < count)
                 {
                     std::cout << " ---------------------------------------------------" << std::endl;
-                    std::cout << "| " << std::setw(10) << book.contact[j].index << " | " << std::setw(10) << tr10(book.contact[j].first_name) << " | " << std::setw(10) << tr10(book.contact[j].last_name) << " | " << std::setw(10) << tr10(book.contact[j].nickname) << " |" << std::endl;
+                    std::cout << "| " << std::setw(10) << book.contact[j].get_index() << " | " << std::setw(10) << tr10(book.contact[j].get_first()) << " | " << std::setw(10) << tr10(book.contact[j].get_last()) << " | " << std::setw(10) << tr10(book.contact[j].get_nick()) << " |" << std::endl;
                     j++;
                 }
                 std::cout << "> Enter the index: ";
@@ -84,10 +107,10 @@ int main()
 
                 if (index >= 0 && index < count)
                 {
-                    std::cout << "Index: " << book.contact[index].index << std::endl;
-                    std::cout << "First Name: " << book.contact[index].first_name << std::endl;
-                    std::cout << "Last Name: " << book.contact[index].last_name << std::endl;
-                    std::cout << "Nickname: " << book.contact[index].nickname << std::endl;
+                    std::cout << "Index: " << book.contact[index].get_index() << std::endl;
+                    std::cout << "First Name: " << book.contact[index].get_first() << std::endl;
+                    std::cout << "Last Name: " << book.contact[index].get_last() << std::endl;
+                    std::cout << "Nickname: " << book.contact[index].get_nick() << std::endl;
                     std::cout << "Phone Number: " << book.contact[index].get_num() << std::endl;
                     std::cout << "Darkest Secret: " << book.contact[index].get_secret() << std::endl;
                 }
