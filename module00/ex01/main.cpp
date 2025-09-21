@@ -2,6 +2,7 @@
 #include <string>
 #include <iomanip>
 #include <limits>
+#include <cctype>
 #include "PhoneBook.hpp"
 
 bool is_num(const std::string& s)
@@ -12,7 +13,7 @@ bool is_num(const std::string& s)
         if (!std::isdigit(ch))
             return false;
     }
-    return true;
+    return !s.empty();
 }
 
 std::string tr10(std::string s)
@@ -39,17 +40,19 @@ int main()
     while (true)
     {
         std::cout << "> "; 
-        std::getline(std::cin, cmd);
-
+        if (!std::getline(std::cin, cmd))
+        {
+            std::cout << "bye :)" << std::endl;
+            return 0;
+        }
         if (cmd == "ADD")
         {
             do {
                 std::cout << "> Enter the first name (required): ";
-                std::getline(std::cin, first);
-                if (!std::getline(std::cin, cmd))
+                if (!std::getline(std::cin, first))
                 {
                     std::cout << "bye :)" << std::endl;
-                    break;
+                    return 0;
                 }
                 if (first.empty())
                     std::cout << "  First name cannot be empty." << std::endl;
@@ -57,15 +60,24 @@ int main()
             book.contact[i].set_first(first);
 
             std::cout << "> Enter the last name (optional): ";
-            std::getline(std::cin, last);
+            if (!std::getline(std::cin, last)) {
+                std::cout << "bye :)" << std::endl;
+                return 0;
+            }
             book.contact[i].set_last(last);
             std::cout << "> Enter the nickname (optional): ";
-            std::getline(std::cin, nick);
+            if (!std::getline(std::cin, nick)) {
+                std::cout << "bye :)" << std::endl;
+                return 0;
+            }
             book.contact[i].set_nick(nick);
 
             do {
                 std::cout << "> Enter the phone number (required): ";
-                std::getline(std::cin, num);
+                if (!std::getline(std::cin, num)) {
+                    std::cout << "bye :)" << std::endl;
+                    return 0;
+                }
                 if (num.empty())
                     std::cout << "  Phone number cannot be empty." << std::endl;
                 else if (!is_num(num))
@@ -74,7 +86,10 @@ int main()
             book.contact[i].set_num(num);
 
             std::cout << "> Enter the darkest secret (optional): ";
-            std::getline(std::cin, sec);
+            if (!std::getline(std::cin, sec)) {
+                std::cout << "bye :)" << std::endl;
+                return 0;
+            }
             book.contact[i].set_secret(sec);
 
             book.contact[i].set_index(i);
@@ -96,14 +111,18 @@ int main()
                     j++;
                 }
                 std::cout << "> Enter the index: ";
-                if (!(std::cin >> index))
+                std::string idx_line;
+                if (!std::getline(std::cin, idx_line))
                 {
-                    std::cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    std::cout << "  Not a number :)" << std::endl;
+                    std::cout << "bye :)\n";
+                    return 0;
+                }
+                if (!is_num(idx_line))
+                {
+                    std::cout << "  Not a number :)\n";
                     continue;
                 }
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                int index = std::stoi(idx_line);
 
                 if (index >= 0 && index < count)
                 {
