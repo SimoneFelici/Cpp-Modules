@@ -14,9 +14,19 @@ int main(int argc, char **argv)
 
     if (argc == 4)
     {
+        const std::string out = argv[1];
         std::ifstream infile(argv[1]);
-        std::ofstream outfile("out.replace");
-        while (getline (infile, input))
+        if (!infile)
+        {
+            std::cerr << "Cant open " << argv[1] << std::endl;
+            return 1;
+        }
+        std::ofstream outfile(out + ".replace");
+        if (!outfile)
+        {
+            std::cerr << "Cant create " << out << std::endl; return 1;
+        }
+        while (std::getline (infile, input))
         {
             i = input.find(argv[2], 0);
             if (i != std::string::npos)
