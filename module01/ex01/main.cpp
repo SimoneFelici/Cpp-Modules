@@ -3,9 +3,10 @@
 int main()
 {
     int i;
-    Zombie *z = zombieHorde(5, "fire");
+    int N = 15;
+    Zombie *z = zombieHorde(N, "fire");
     
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < N; i++)
     {
         z[i].announce();
     }
