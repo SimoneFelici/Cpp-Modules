@@ -1,6 +1,8 @@
 #include "Animal.hpp"
 #include "Dog.hpp"
 #include "Cat.hpp"
+#include "WrongAnimal.hpp"
+#include "WrongCat.hpp"
 #include <iostream>
 
 static void hr(const std::string& title)
@@ -84,5 +86,21 @@ int main()
     delete cp;
 
     hr("Done");
+
+    hr("WrongAnimal / WrongCat demo (no virtual)");
+
+    const WrongAnimal* w = new WrongCat();
+    std::cout << "Wrong type through base*: " << w->getType() << std::endl;
+    std::cout << "Calling makeSound() via WrongAnimal*: ";
+    w->makeSound(); // calls WrongAnimal::makeSound() (WRONG behavior)
+    // Avoid delete via base* because destructor is not virtual in WrongAnimal.
+    // To keep behavior defined, do this instead:
+    delete static_cast<const WrongCat*>(w);
+
+    // Also show stack behavior:
+    WrongCat wc;
+    WrongAnimal& wr = wc;
+    std::cout << "Calling makeSound() via WrongAnimal&: ";
+    wr.makeSound(); // still WrongAnimal::makeSound() due to static binding
     return 0;
 }
