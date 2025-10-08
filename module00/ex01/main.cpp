@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <string>
 #include <iomanip>
 #include <cctype>
@@ -28,7 +29,6 @@ int main()
     PhoneBook book;
     int i = 0;
     int j = 0;
-    int index = 0;
     int count = 0;
     std::string num;
     std::string sec;
@@ -121,7 +121,7 @@ int main()
                     std::cout << "  Not a number :)\n";
                     continue;
                 }
-                int index = std::stoi(idx_line);
+                int index = std::atoi(idx_line.c_str());
 
                 if (index >= 0 && index < count)
                 {

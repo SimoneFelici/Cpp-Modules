@@ -5,51 +5,41 @@
 
 int main()
 {
-    std::cout << "=== Single alloc/free test ===\n";
     const Animal* j = new Dog();
     const Animal* i = new Cat();
-    delete j; // should not leak
+    delete j;
     delete i;
 
-    std::cout << "\n=== Polymorphic array test ===\n";
+    std::cout << "\n--- Array test ---\n";
     const int N = 10;
-    Animal* zoo[N];
+    Animal* animals[N];
 
     for (int idx = 0; idx < N; ++idx)
     {
-        if (idx < N/2) zoo[idx] = new Dog();
-        else           zoo[idx] = new Cat();
+        if (idx < N/2)
+            animals[idx] = new Dog();
+        else
+            animals[idx] = new Cat();
     }
 
     for (int idx = 0; idx < N; ++idx)
-        delete zoo[idx];
+        delete animals[idx];
 
-    std::cout << "\n=== Deep copy tests (Dog) ===\n";
-    Dog a;
-    a.setIdea(0, "Chase ball");
-    Dog b(a);
-    std::cout << "a[0]=" << a.getIdea(0) << " | b[0]=" << b.getIdea(0) << "\n";
-    a.setIdea(0, "Chew bone");
-    std::cout << "after change: a[0]=" << a.getIdea(0) 
-              << " | b[0]=" << b.getIdea(0) << " (b unchanged)\n";
+    std::cout << "\n--- Deep copy test ---\n";
+    Dog d1;
+    d1.setIdea(0, "Chase ball");
+    Dog d2(d1);
+    d1.setIdea(0, "Chew bone");
+    std::cout << "d1[0]: " << d1.getIdea(0) << std::endl;
+    std::cout << "d2[0]: " << d2.getIdea(0) << std::endl;
 
-    std::cout << "\n=== Deep copy tests (Cat, assignment) ===\n";
     Cat c1;
-    c1.setIdea(1, "Nap on keyboard");
+    c1.setIdea(0, "Sleep");
     Cat c2;
     c2 = c1;
-    std::cout << "c1[1]=" << c1.getIdea(1) << " | c2[1]=" << c2.getIdea(1) << "\n";
-    c1.setIdea(1, "Knock glass off table");
-    std::cout << "after change: c1[1]=" << c1.getIdea(1)
-              << " | c2[1]=" << c2.getIdea(1) << " (c2 unchanged)\n";
-
-    std::cout << "\n=== Sounds ===\n";
-    const Animal* d = new Dog();
-    const Animal* c = new Cat();
-    d->makeSound();
-    c->makeSound();
-    delete d;
-    delete c;
+    c1.setIdea(0, "Hunt");
+    std::cout << "c1[0]: " << c1.getIdea(0) << std::endl;
+    std::cout << "c2[0]: " << c2.getIdea(0) << std::endl;
 
     return 0;
 }

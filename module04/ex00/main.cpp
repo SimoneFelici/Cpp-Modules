@@ -5,102 +5,45 @@
 #include "WrongCat.hpp"
 #include <iostream>
 
-static void hr(const std::string& title)
-{
-    std::cout << "\n===== " << title << " =====\n";
-}
-
-static void speak(const Animal& a)
-{
-    a.makeSound();
-}
-
 int main()
 {
-    // 1) Costruzione base e polimorfismo via puntatori a base
-    hr("Base creation & polymorphism");
-    const Animal* base = new Animal();
-    const Animal* pdog = new Dog();
-    const Animal* pcat = new Cat();
-
-    std::cout << "Types: " << pdog->getType() << ", " << pcat->getType() << std::endl;
-    pdog->makeSound();           // Dog
-    pcat->makeSound();           // Cat
-    base->makeSound();           // Animal
-
-    // 2) Distruzione tramite puntatore a base (verifica distruttore virtuale)
-    hr("Delete via base*");
-    delete pcat;
-    delete pdog;
-    delete base;
-
-    // 3) Costruzione su stack + copy constructor / copy assignment
-    hr("Copy ctor / copy assignment");
-    Dog d1;            // default
-    Dog d2(d1);        // copy ctor
-    Dog d3; d3 = d1;   // copy assignment
-    d1.makeSound();
-    d2.makeSound();
-    d3.makeSound();
-
-    Cat c1;
-    Cat c2(c1);
-    Cat c3; c3 = c1;
-    c1.makeSound();
-    c2.makeSound();
-    c3.makeSound();
-
-    // 4) Self-assignment (non deve rompere nulla)
-    hr("Self-assignment");
-    d1 = d1;
-    c1 = c1;
-
-    // 5) Dispatch tramite reference const (test cost-correctness)
-    hr("Dispatch through const Animal&");
-    speak(Dog());
-    speak(Cat());
-
-    // 6) Array polimorfico e cleanup
-    hr("Polymorphic array and cleanup");
-    const size_t N = 6;
-    Animal* zoo[N];
-    for (size_t i = 0; i < N; ++i)
-        zoo[i] = (i % 2 == 0) ? static_cast<Animal*>(new Dog()) : static_cast<Animal*>(new Cat());
-    for (size_t i = 0; i < N; ++i)
-        zoo[i]->makeSound();
-    for (size_t i = 0; i < N; ++i)
-        delete zoo[i];
-
-    // 7) Slicing dimostrativo: il tipo "dinamico" va perso
-    hr("Object slicing demo");
-    Dog d4;
-    Animal a = d4;    // slicing: rimane solo la parte Animal
-    std::cout << "Sliced Animal type: " << a.getType() << std::endl;
-    a.makeSound();    // chiama Animal::makeSound(), non Dog::makeSound()
-
-    // 8) Puntatore a base const (ulteriore test di metodi const)
-    hr("Const base* usage");
-    const Animal* cp = new Dog();
-    std::cout << "Const base* getType(): " << cp->getType() << std::endl;
-    cp->makeSound();  // deve compilare solo se makeSound() è const nelle derivate
-    delete cp;
-
-    hr("Done");
-
-    hr("WrongAnimal / WrongCat demo (no virtual)");
-
-    const WrongAnimal* w = new WrongCat();
-    std::cout << "Wrong type through base*: " << w->getType() << std::endl;
-    std::cout << "Calling makeSound() via WrongAnimal*: ";
-    w->makeSound(); // calls WrongAnimal::makeSound() (WRONG behavior)
-    // Avoid delete via base* because destructor is not virtual in WrongAnimal.
-    // To keep behavior defined, do this instead:
-    delete static_cast<const WrongCat*>(w);
-
-    // Also show stack behavior:
-    WrongCat wc;
-    WrongAnimal& wr = wc;
-    std::cout << "Calling makeSound() via WrongAnimal&: ";
-    wr.makeSound(); // still WrongAnimal::makeSound() due to static binding
+    const Animal* meta = new Animal();
+    const Animal* j = new Dog();
+    const Animal* i = new Cat();
+    
+    std::cout << j->getType() << " " << std::endl;
+    std::cout << i->getType() << " " << std::endl;
+    i->makeSound();
+    j->makeSound();
+    meta->makeSound();
+    
+    delete i;
+    delete j;
+    delete meta;
+    
+    std::cout << "\n--- Wrong Animal Tests ---\n";
+    const WrongAnimal* wrong = new WrongAnimal();
+    const WrongAnimal* wrongCat = new WrongCat();
+    
+    std::cout << wrongCat->getType() << " " << std::endl;
+    wrongCat->makeSound();
+    wrong->makeSound();
+    
+    delete static_cast<const WrongCat*>(wrongCat);
+    delete wrong;
+    
+    std::cout << "\n--- Array Test ---\n";
+    Animal* animals[4];
+    animals[0] = new Dog();
+    animals[1] = new Cat();
+    animals[2] = new Dog();
+    animals[3] = new Cat();
+    
+    for (int i = 0; i < 4; i++)
+        animals[i]->makeSound();
+    
+    for (int i = 0; i < 4; i++)
+        delete animals[i];
+    
     return 0;
 }

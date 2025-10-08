@@ -5,12 +5,12 @@
 
 class Contact {
 public:
-    int get_index();
-    std::string get_first();
-    std::string get_last();
-    std::string get_nick();
-    std::string get_secret();
-    std::string get_num();
+    int get_index() const;
+    std::string get_first() const;
+    std::string get_last() const;
+    std::string get_nick() const;
+    std::string get_secret() const;
+    std::string get_num() const;
 
     void set_index(int n);
     void set_first(const std::string& s);
