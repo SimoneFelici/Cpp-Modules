@@ -9,7 +9,7 @@ int main()
     std::string &stringREF = str;
 
     std::cout << std::setw(22) << "address of string: " << &str << std::endl;
-    std::cout << "address of stringPTR: " << stringPTR << std::endl;
+    std::cout << "address of stringPTR: " << &stringPTR << std::endl;
     std::cout << "address of stringREF: " << &stringREF << std::endl;
 
     std::cout << std::endl;
