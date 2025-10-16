@@ -4,22 +4,24 @@
 #include "WrongAnimal.hpp"
 #include "WrongCat.hpp"
 #include <iostream>
+#include <cstdlib>
 
 int main()
 {
-    const Animal* meta = new Animal();
-    const Animal* j = new Dog();
-    const Animal* i = new Cat();
+    const Animal* animal = new Animal();
+    const Animal* dog = new Dog();
+    const Animal* cat = new Cat();
     
-    std::cout << j->getType() << " " << std::endl;
-    std::cout << i->getType() << " " << std::endl;
-    i->makeSound();
-    j->makeSound();
-    meta->makeSound();
+    std::cout << dog->getType() << " " << std::endl;
+    std::cout << cat->getType() << " " << std::endl;
+    cat->makeSound();
+    dog->makeSound();
+    animal->makeSound();
+
     
-    delete i;
-    delete j;
-    delete meta;
+    delete cat;
+    delete dog;
+    delete animal;
     
     std::cout << "\n--- Wrong Animal Tests ---\n";
     const WrongAnimal* wrong = new WrongAnimal();
@@ -29,7 +31,7 @@ int main()
     wrongCat->makeSound();
     wrong->makeSound();
     
-    delete static_cast<const WrongCat*>(wrongCat);
+    delete wrongCat;
     delete wrong;
     
     std::cout << "\n--- Array Test ---\n";
