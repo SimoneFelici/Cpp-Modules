@@ -6,15 +6,15 @@ Animal::Animal() : type("mhhh")
     std::cout << "Animal created" << std::endl; 
 }
 
-Animal::Animal(const Animal& other) : type("mhhh")
+Animal::Animal(const Animal& other) : type(other.type)
 {
-    *this = other;
     std::cout << "Animal Copy constructor called" << std::endl;
 }
 
 Animal &Animal::operator=(const Animal& other)
 {
-    type = other.getType();
+    if (this != &other)
+        type = other.type;
     std::cout << "Animal Copy assignment operator called" << std::endl;
     return *this;
 }
