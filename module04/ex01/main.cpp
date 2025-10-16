@@ -4,12 +4,12 @@
 #include <iostream>
 
 int main()
-{   
+{
     std::cout << "\n--- Animals ---\n";
-    
+
     const Animal* j = new Dog();
     const Animal* i = new Cat();
-    
+
     delete j;
     delete i;
 
