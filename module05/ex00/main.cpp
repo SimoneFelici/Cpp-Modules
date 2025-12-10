@@ -4,11 +4,11 @@
 
 int main()
 {
-    Bureaucrat fire("Marius", 4);
-
-    std::cout << fire;
     try
     {
+        Bureaucrat fire("Marius", 0);
+
+        std::cout << fire;
         fire.incrementGrade();
         std::cout << fire;
         fire.incrementGrade();
