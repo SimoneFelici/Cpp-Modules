@@ -1,5 +1,4 @@
 #pragma once
-
 #include <string>
 
 class ScalarConverter {
@@ -17,4 +16,7 @@ private:
     static bool checkInt(const std::string& input);
     static bool checkFloat(const std::string& input);
     static bool checkDouble(const std::string& input);
+
+    static void printAll(double value, bool isSpecial);
+    static void printImpossible();
 };
