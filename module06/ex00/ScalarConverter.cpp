@@ -5,15 +5,6 @@
 #include <iostream>
 #include <string>
 
-ScalarConverter::ScalarConverter() { }
-ScalarConverter::~ScalarConverter() { }
-ScalarConverter::ScalarConverter(const ScalarConverter& other) { *this = other; }
-ScalarConverter& ScalarConverter::operator=(const ScalarConverter& other)
-{
-    (void)other;
-    return (*this);
-}
-
 bool ScalarConverter::checkChar(const std::string& input)
 {
     return (input.length() == 3 && input[0] == '\'' && input[2] == '\'');
