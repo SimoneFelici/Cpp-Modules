@@ -1,3 +1,5 @@
+#pragma once
+
 template <typename T>
 void iter(T* array, unsigned int len, void (*f)(T&))
 {
