@@ -3,20 +3,52 @@
 
 int main()
 {
-    Span a(5);
+    Span sp = Span(5);
+    sp.addNumber(6);
+    sp.addNumber(3);
+    sp.addNumber(17);
+    sp.addNumber(9);
+    sp.addNumber(11);
+    std::cout << sp.shortestSpan() << std::endl;
+    std::cout << sp.longestSpan() << std::endl;
+
+    Span sp2(10000);
+    for (int i = 0; i < 10000; ++i)
+        sp2.addNumber(i);
+    std::cout << sp2.shortestSpan() << std::endl;
+    std::cout << sp2.longestSpan() << std::endl;
+
+    Span sp3(100);
+    std::vector<int> vec;
+    for (int i = 0; i < 100; ++i)
+        vec.push_back(i * 10);
+    sp3.addRange(vec.begin(), vec.end());
+    std::cout << sp3.shortestSpan() << std::endl;
+    std::cout << sp3.longestSpan() << std::endl;
+
     try {
-        a.addNumber(1);
-        a.addNumber(9);
-        a.addNumber(23);
-        a.addNumber(65);
-        a.addNumber(3);
+        Span sp4(2);
+        sp4.addNumber(1);
+        sp4.addNumber(2);
+        sp4.addNumber(3);
     } catch (std::exception& e) {
-        std::cout << "Exceeded size" << std::endl;
+        std::cout << "Exception caught" << std::endl;
     }
-    try {
-        std::cout << "Shorted Span: " << a.shortestSpan() << std::endl;
-        std::cout << "Longest Span:" << a.longestSpan() << std::endl;
-    } catch (std::exception& e) {
-        std::cout << "Less than 2 values" << std::endl;
-    }
+
+    return 0;
 }
+
+/*
+int main()
+{
+    Span sp = Span(5);
+    sp.addNumber(6);
+    sp.addNumber(3);
+    sp.addNumber(17);
+    sp.addNumber(9);
+    sp.addNumber(11);
+    std::cout << sp.shortestSpan() << std::endl;
+    std::cout << sp.longestSpan() << std::endl;
+    return 0;
+}
+*/

@@ -1,28 +1,48 @@
 #include "Span.hpp"
+#include <exception>
 
 Span::Span(unsigned int num)
     : N(num)
-    , vec(0) {
-
-    };
+    , vec()
+{
+    vec.reserve(N);
+};
 Span::Span(const Span& other)
     : N(other.N)
-    , vec(other.vec) {
+    , vec()
+{
+    vec.reserve(N);
+    vec = other.vec;
+}
 
-    };
 Span& Span::operator=(const Span& other)
 {
-    N = other.N;
-    this->vec = other.vec;
+    if (this != &other) {
+        vec.reserve(N);
+        vec = other.vec;
+    }
     return (*this);
-};
+}
 
 void Span::addNumber(int add)
 {
-    if (N == 0)
+    if (vec.size() >= N)
         throw std::exception();
     this->vec.push_back(add);
-    --N;
+}
+
+void Span::addRange(std::vector<int>::iterator start, std::vector<int>::iterator end)
+{
+    if ((vec.size() + (end - start)) > N)
+        throw std::exception();
+    vec.insert(vec.end(), start, end);
+}
+
+const int& Span::operator[](unsigned int i) const
+{
+    if (vec.size() < i)
+        throw std::exception();
+    return vec[i];
 }
 
 unsigned int Span::shortestSpan()
