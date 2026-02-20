@@ -1,0 +1,90 @@
+#include "BitcoinExchange.hpp"
+#include <sstream>
+#include <stdexcept>
+
+BitcoinExchange::BitcoinExchange() { }
+
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& other)
+    : db(other.db)
+{
+}
+
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
+{
+    if (this != &other)
+        db = other.db;
+    return (*this);
+}
+
+BitcoinExchange::~BitcoinExchange() { }
+
+bool BitcoinExchange::checkRate(const std::string& str, float& out)
+{
+    std::istringstream iss(str);
+    if (!(iss >> out))
+        return false;
+    if (out < 0)
+        return false;
+    return true;
+}
+
+bool BitcoinExchange::checkDate(const std::string& date)
+{
+    if (date.length() != 10)
+        return false;
+    if (date[4] != '-' || date[7] != '-')
+        return false;
+
+    std::string yearStr = date.substr(0, 4);
+    std::string monthStr = date.substr(5, 2);
+    std::string dayStr = date.substr(8, 2);
+
+    int year, month, day;
+    std::istringstream(yearStr) >> year;
+    std::istringstream(monthStr) >> month;
+    std::istringstream(dayStr) >> day;
+
+    if (month < 1 || month > 12)
+        return false;
+    if (day < 1 || day > 31)
+        return false;
+    if (year < 0)
+        return false;
+
+    return true;
+}
+
+void BitcoinExchange::checkDB()
+{
+    std::string line;
+    std::ifstream file_db("cpp_09/data.csv");
+    std::string date;
+    std::string rateStr;
+    float rate;
+
+    if (file_db.is_open()) {
+        getline(file_db, line);
+        if (line.compare("date,exchange_rate") != 0) {
+            throw std::runtime_error("Incorrect CSV headers, Expected:\ndate,exchange_rate\n");
+        }
+        while (getline(file_db, line)) {
+            date = line.substr(0, line.find(','));
+            rateStr = line.substr(line.find(',') + 1);
+
+            if (!checkDate(date))
+                throw std::runtime_error("Invalid date in CSV: " + line);
+            if (!checkRate(rateStr, rate))
+                throw std::runtime_error("Invalid rate in CSV: " + line);
+
+            db[date] = rate;
+        }
+        file_db.close();
+    }
+
+    else
+        throw std::runtime_error("Unable to open file");
+}
+
+void BitcoinExchange::loadDB()
+{
+}
