@@ -22,7 +22,7 @@ private:
     std::map<std::string, double> db;
 
     bool checkDate(const std::string& date);
-    bool checkValue(const std::string& value);
+    bool checkValue(const std::string& rate, double& out);
     bool checkRate(const std::string& rate, double& out);
 };
 

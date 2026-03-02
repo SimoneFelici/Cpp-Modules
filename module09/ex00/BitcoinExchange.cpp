@@ -1,6 +1,9 @@
 #include "BitcoinExchange.hpp"
+#include <algorithm>
+#include <cctype>
 #include <sstream>
 #include <stdexcept>
+#include <string>
 
 BitcoinExchange::BitcoinExchange() { }
 
@@ -118,10 +121,32 @@ void BitcoinExchange::loadDB()
         throw std::runtime_error("Unable to open db file");
 }
 
+bool is_not_space(char c)
+{
+    return !std::isspace(static_cast<unsigned char>(c));
+}
+
 void trim(std::string& str)
 {
-    str.erase(str.begin(), std::find_if_not(str.begin(), str.end(), ::isspace));
-    str.erase(std::find_if_not(str.rbegin(), str.rend(), ::isspace).base(), str.end());
+    str.erase(str.begin(), std::find_if(str.begin(), str.end(), is_not_space));
+    str.erase(std::find_if(str.rbegin(), str.rend(), is_not_space).base(), str.end());
+}
+
+bool BitcoinExchange::checkValue(const std::string& str, double& out)
+{
+    std::istringstream iss(str);
+    char extra;
+
+    if (!(iss >> out))
+        return false;
+
+    if (iss >> extra)
+        return false;
+
+    if (out < 0 || out > 1000)
+        return false;
+
+    return true;
 }
 
 void BitcoinExchange::parseInput(std::string arg)
@@ -129,8 +154,9 @@ void BitcoinExchange::parseInput(std::string arg)
     std::ifstream input(arg.c_str());
     std::string line;
     std::string date;
-    // std::string rateStr;
-    // double rate;
+    std::string rateStr;
+    double rate;
+    std::map<std::string, double>::iterator it;
 
     if (input.is_open()) {
         getline(input, line);
@@ -138,9 +164,26 @@ void BitcoinExchange::parseInput(std::string arg)
             throw std::runtime_error("Incorrect input headers, Expected:\ndate | value\n");
         }
         while (getline(input, line)) {
-            std::cout << line << '\n';
             date = line.substr(0, line.find('|'));
             trim(date);
+            rateStr = line.substr(line.find('|') + 1);
+            trim(rateStr);
+            if (!checkDate(date)) {
+                std::cout
+                    << "Error: invalid date in input: " << date << '\n';
+                continue;
+            }
+            if (!checkValue(rateStr, rate)) {
+                std::cout << "Error: invalid value in input: " << rateStr << '\n';
+                continue;
+            }
+            it = db.upper_bound(date);
+            if (it == db.begin()) {
+                std::cout << "Error: no exchange rate found for date: " << date << '\n';
+                continue;
+            }
+            --it;
+            std::cout << date << " => " << rate << " = " << it->second * rate << '\n';
         }
     } else
         throw std::runtime_error("Unable to open input file");
