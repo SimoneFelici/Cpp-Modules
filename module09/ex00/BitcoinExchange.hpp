@@ -13,8 +13,9 @@ public:
     BitcoinExchange& operator=(const BitcoinExchange& other);
     ~BitcoinExchange();
     void checkDB();
-    void checkInput();
     void loadDB();
+
+    void checkInput();
     void parseInput();
 
 private:

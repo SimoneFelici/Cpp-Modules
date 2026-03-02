@@ -21,10 +21,26 @@ BitcoinExchange::~BitcoinExchange() { }
 bool BitcoinExchange::checkRate(const std::string& str, float& out)
 {
     std::istringstream iss(str);
+    char extra;
+
     if (!(iss >> out))
         return false;
+
+    if (iss >> extra)
+        return false;
+
     if (out < 0)
         return false;
+
+    return true;
+}
+
+bool isAllDigits(const std::string& s)
+{
+    for (size_t i = 0; i < s.length(); ++i) {
+        if (!std::isdigit(s[i]))
+            return false;
+    }
     return true;
 }
 
@@ -32,6 +48,7 @@ bool BitcoinExchange::checkDate(const std::string& date)
 {
     if (date.length() != 10)
         return false;
+
     if (date[4] != '-' || date[7] != '-')
         return false;
 
@@ -39,16 +56,24 @@ bool BitcoinExchange::checkDate(const std::string& date)
     std::string monthStr = date.substr(5, 2);
     std::string dayStr = date.substr(8, 2);
 
-    int year, month, day;
+    if (!isAllDigits(yearStr) || !isAllDigits(monthStr) || !isAllDigits(dayStr))
+        return false;
+
+    int year;
+    int month;
+    int day;
+
     std::istringstream(yearStr) >> year;
     std::istringstream(monthStr) >> month;
     std::istringstream(dayStr) >> day;
 
+    if (year < 0)
+        return false;
+
     if (month < 1 || month > 12)
         return false;
+
     if (day < 1 || day > 31)
-        return false;
-    if (year < 0)
         return false;
 
     return true;
