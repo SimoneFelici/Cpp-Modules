@@ -169,17 +169,17 @@ void BitcoinExchange::parseInput(std::string arg)
             rateStr = line.substr(line.find('|') + 1);
             trim(rateStr);
             if (!checkDate(date)) {
-                std::cout
+                std::cerr
                     << "Error: invalid date in input: " << date << '\n';
                 continue;
             }
             if (!checkValue(rateStr, rate)) {
-                std::cout << "Error: invalid value in input: " << rateStr << '\n';
+                std::cerr << "Error: invalid value in input: " << rateStr << '\n';
                 continue;
             }
             it = db.upper_bound(date);
             if (it == db.begin()) {
-                std::cout << "Error: no exchange rate found for date: " << date << '\n';
+                std::cerr << "Error: no exchange rate found for date: " << date << '\n';
                 continue;
             }
             --it;
