@@ -18,7 +18,15 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
 
 BitcoinExchange::~BitcoinExchange() { }
 
-bool BitcoinExchange::checkRate(const std::string& str, float& out)
+void BitcoinExchange::printMap()
+{
+    for (std::map<std::string, double>::const_iterator it = this->db.begin(); it != this->db.end(); ++it)
+        std::cout << it->first << " = " << it->second << "\n";
+
+    std::cout << '\n';
+}
+
+bool BitcoinExchange::checkRate(const std::string& str, double& out)
 {
     std::istringstream iss(str);
     char extra;
@@ -79,13 +87,13 @@ bool BitcoinExchange::checkDate(const std::string& date)
     return true;
 }
 
-void BitcoinExchange::checkDB()
+void BitcoinExchange::loadDB()
 {
     std::string line;
     std::ifstream file_db("cpp_09/data.csv");
     std::string date;
     std::string rateStr;
-    float rate;
+    double rate;
 
     if (file_db.is_open()) {
         getline(file_db, line);
@@ -108,8 +116,4 @@ void BitcoinExchange::checkDB()
 
     else
         throw std::runtime_error("Unable to open file");
-}
-
-void BitcoinExchange::loadDB()
-{
 }

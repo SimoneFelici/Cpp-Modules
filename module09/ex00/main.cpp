@@ -12,15 +12,14 @@ int main(int argc, char** argv)
     BitcoinExchange db;
 
     try {
-        db.checkDB();
+        db.loadDB();
     } catch (const std::runtime_error& e) {
         std::cout << e.what() << "\n";
         return (1);
     }
-    // try {
-    //     db.loadDB();
-    // } catch (const std::runtime_error &e) {
-    //     std::cout << e.what() << "\n";
-    // return (1);
-    // }
+
+    db.printMap();
+
+    double a = 39141.25;
+    std::cout << a << '\n';
 }

@@ -12,18 +12,18 @@ public:
     BitcoinExchange(const BitcoinExchange& other);
     BitcoinExchange& operator=(const BitcoinExchange& other);
     ~BitcoinExchange();
-    void checkDB();
     void loadDB();
 
     void checkInput();
     void parseInput();
+    void printMap();
 
 private:
-    std::map<std::string, float> db;
+    std::map<std::string, double> db;
 
     bool checkDate(const std::string& date);
     bool checkValue(const std::string& value);
-    bool checkRate(const std::string& rate, float& out);
+    bool checkRate(const std::string& rate, double& out);
 };
 
 // std::ostream& operator<<(std::ostream& os, BitcoinExchange bit);
