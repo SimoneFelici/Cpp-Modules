@@ -18,8 +18,6 @@ int main(int argc, char** argv)
         return (1);
     }
 
-    db.printMap();
-
-    double a = 39141.25;
-    std::cout << a << '\n';
+    // db.printMap();
+    db.parseInput(argv[1]);
 }

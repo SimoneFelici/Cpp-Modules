@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <exception>
 #include <fstream>
 #include <iostream>
@@ -14,8 +15,7 @@ public:
     ~BitcoinExchange();
     void loadDB();
 
-    void checkInput();
-    void parseInput();
+    void parseInput(std::string arg);
     void printMap();
 
 private:

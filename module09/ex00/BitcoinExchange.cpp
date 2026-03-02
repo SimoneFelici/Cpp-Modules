@@ -115,5 +115,33 @@ void BitcoinExchange::loadDB()
     }
 
     else
-        throw std::runtime_error("Unable to open file");
+        throw std::runtime_error("Unable to open db file");
+}
+
+void trim(std::string& str)
+{
+    str.erase(str.begin(), std::find_if_not(str.begin(), str.end(), ::isspace));
+    str.erase(std::find_if_not(str.rbegin(), str.rend(), ::isspace).base(), str.end());
+}
+
+void BitcoinExchange::parseInput(std::string arg)
+{
+    std::ifstream input(arg.c_str());
+    std::string line;
+    std::string date;
+    // std::string rateStr;
+    // double rate;
+
+    if (input.is_open()) {
+        getline(input, line);
+        if (line.compare("date | value") != 0) {
+            throw std::runtime_error("Incorrect input headers, Expected:\ndate | value\n");
+        }
+        while (getline(input, line)) {
+            std::cout << line << '\n';
+            date = line.substr(0, line.find('|'));
+            trim(date);
+        }
+    } else
+        throw std::runtime_error("Unable to open input file");
 }
