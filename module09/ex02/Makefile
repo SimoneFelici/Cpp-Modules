@@ -1,5 +1,5 @@
-NAME     := template
-SRCS     := main.cpp
+NAME     := RPN
+SRCS     := main.cpp RPN.cpp
 OBJS     := $(SRCS:.cpp=.o)
 
 CXX      := c++

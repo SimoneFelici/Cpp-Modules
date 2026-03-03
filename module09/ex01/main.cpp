@@ -3,10 +3,6 @@
 #include <iostream>
 #include <string>
 
-void operation()
-{
-}
-
 int main(int argc, char** argv)
 {
 
