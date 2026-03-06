@@ -84,7 +84,7 @@ std::vector<int> PmergeMe::mergeInsertSort(std::vector<int> v)
         n--;
     }
 
-    std::vector<std::pair<int, int>> pairs;
+    std::vector<std::pair<int, int> > pairs;
     for (size_t i = 0; i < n; i += 2) {
         int a = v[i], b = v[i + 1];
         if (a < b)
@@ -144,7 +144,7 @@ std::deque<int> PmergeMe::mergeInsertSortDeque(std::deque<int> d)
         n--;
     }
 
-    std::vector<std::pair<int, int>> pairs;
+    std::vector<std::pair<int, int> > pairs;
     for (size_t i = 0; i < n; i += 2) {
         int a = d[i], b = d[i + 1];
         if (a < b)
