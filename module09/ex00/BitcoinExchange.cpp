@@ -161,7 +161,8 @@ void BitcoinExchange::parseInput(std::string arg)
     if (input.is_open()) {
         getline(input, line);
         if (line.compare("date | value") != 0) {
-            throw std::runtime_error("Incorrect input headers, Expected:\ndate | value\n");
+            std::cerr
+                << "Error: Incorrect input headers, Expected:\ndate | value\n";
         }
         while (getline(input, line)) {
             date = line.substr(0, line.find('|'));
